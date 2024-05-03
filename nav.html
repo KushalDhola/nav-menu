@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu with Submenus</title>
+    <style>
+        .header {
+            width: 95%;
+            margin: 10px auto;
+            padding: 20px;
+            background-color: burlywood;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sticky {
+            position: sticky;
+            top: 10px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 60px;
+
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: antiquewhite;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: end;
+        }
+
+        .nav-menu-ul {
+            display: flex;
+            flex-wrap: nowrap;
+
+        }
+
+        .nav-menu ul li {
+            display: inline-block;
+            position: relative;
+        }
+
+
+        .nav-menu ul li a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 148%;
+            left: 0;
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .submenu li {
+            display: block;
+            min-width: 170px;
+        }
+
+        .sub-submenu {
+            display: none;
+            /* Hide submenu by default */
+        }
+
+        .submenu-icon {
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            transform: translateY(-50%) rotate(90deg);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23333"><path d="M10 15l3-3-3-3v6z"/></svg>') no-repeat;
+        }
+
+        .sub-submenu-icon {
+            position: absolute;
+            top: 18px;
+            right: 21px;
+            transform: translateY(-50%) rotate(90deg);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23333"><path d="M10 15l3-3-3-3v6z"/></svg>') no-repeat;
+        }
+
+        .submenu-icon.active,
+        .sub-submenu-icon.active {
+            transform: translateY(-50%) rotate(270deg);
+        }
+
+        .sub-submenu-parent .sub-submenu li {
+            padding-left: 10px;
+            min-width: 160px;
+        }
+
+        .text {
+            background: #3f3030;
+        }
+
+        .text1 {
+            background-color: rgb(23, 52, 42);
+        }
+
+        .text1,
+        .text {
+            width: 100vw;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: capitalize;
+        }
+
+        .hamburger {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .bar1,
+        .bar2,
+        .bar3 {
+            width: 35px;
+            height: 5px;
+            background-color: #333;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+
+        .change .bar1 {
+            transform: translate(0, 11px) rotate(-45deg);
+        }
+
+        .change .bar2 {
+            opacity: 0;
+        }
+
+        .change .bar3 {
+            transform: translate(0, -11px) rotate(45deg);
+        }
+
+        #myLinks {
+            position: fixed;
+            width: 150px;
+            left: -150px;
+            height: calc(100vh - 110px);
+            bottom: 0px;
+            background-color: antiquewhite;
+            display: none;
+            flex-direction: column;
+
+        }
+
+        .ham-ul {
+            list-style: none;
+        }
+
+        .ham-ul a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .hamburger {
+            width: 30%;
+        }
+
+        .nav-menu {
+            width: 42%;
+            min-width: 471px;
+        }
+
+        .header-logo {
+            display: flex;
+
+            align-items: center;
+            width: 30%;
+            max-width: 260px;
+            min-width: 175px;
+        }
+
+        /* more menu */
+        .more-btn {
+            color: red;
+        }
+
+        .auto-nav-more {
+            position: relative;
+        }
+
+        .auto-nav-more-list {
+            position: absolute;
+            min-width: 170px;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+            text-align: left;
+            padding: 0;
+            list-style: none;
+            background-color: antiquewhite;
+            border-radius: 4px;
+        }
+
+        .auto-nav-more:hover .auto-nav-more-list {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media only screen and (max-width:1024px) {
+
+            .nav-menu {
+                min-width: auto;
+
+                width: 40%;
+            }
+
+            .header {
+                padding: 7px;
+            }
+
+            #myLinks {
+                height: calc(100vh - 74px);
+            }
+        }
+
+        @media only screen and (max-width:645px) {
+            #myLinks {
+                height: calc(100vh - 65px);
+            }
+
+            .submenu {
+                position: relative;
+            }
+
+            .submenu-icon.active {
+                top: 20px;
+                right: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header sticky">
+        <div class="hamburger" ">
+        <div class=" bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+
+    <div class="header-logo">
+        <a href="#hero"> <img src="../logo.png" alt="" width="100%"></a>
+    </div>
+
+    <nav class="nav-menu" id="mainMenu">
+        <ul class="nav-menu-ul" id="autoNav">
+            <li><a href="#hero">Home</a></li>
+            <li class="submenu-parent">
+                <a href="#section1">Products</a>
+                <span class="submenu-icon"> <a class="sub"></a></span>
+
+                <ul class="submenu">
+                    <li><a href="#section2">Category 1</a></li>
+                    <li class="sub-submenu-parent">
+                        <a href="#">Category 2 </a> <span class="sub-submenu-icon"></span>
+
+                        <ul class="sub-submenu">
+                            <li><a href="#section3">section 3</a></li>
+                            <li><a href="#section4">section 4</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="sub-submenu-parent">
+                        <a href="#">Category 3 </a> <span class="sub-submenu-icon"></span>
+
+                        <ul class="sub-submenu">
+                            <li><a href="#section5">section 5</a></li>
+                            <li><a href="#section6">section 6</a></li>
+                            <li><a href="#section7">section 7</a></li>
+                            <li><a href="#section8">section 8</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#section9">Category 4</a></li>
+                </ul>
+            </li>
+            <li><a href="#section10">AboutUs</a></li>
+            <li><a href="#section11">Contact</a></li>
+
+            <li id="autoNavMore" class="auto-nav-more">
+                <a href="#" class="more-btn">more</a>
+                <ul id="autoNavMoreList" class="auto-nav-more-list">
+
+
+                </ul>
+
+    </nav>
+    </div>
+
+
+    <div id="myLinks">
+        <ul class="ham-ul">
+            <li> <a href="#news">News</a></li>
+
+            <li> <a href="#contact">Contact</a></li>
+            <li> <a href="#about">About</a></li>
+
+        </ul>
+    </div>
+
+
+    <div class="text1" id="hero">
+        <h1>Home</h1>
+    </div>
+    <div class="text" id="section1">
+        <h1>Product</h1>
+    </div>
+
+    <div class="text1" id="section10">
+        <h1>About Us</h1>
+    </div>
+    <div class="text" id="section11">
+        <h1>Contact</h1>
+    </div>
+
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // hamburger
+            //  $('.hamburger').on("click", function () {
+            //    $(this).toggleClass('change');
+            //  $('#myLinks').slideToggle('slow')
+            //    });
+
+            // hamburger
+            $('.hamburger').on("click", function () {
+                $(this).toggleClass('change');
+                var $myLinks = $('#myLinks');
+
+                if ($myLinks.css("display") === "none") {
+                    $myLinks.css("display", "block");
+                    $myLinks.animate({ left: '0' }, 'slow'); // Slide in from the left
+                } else {
+                    $myLinks.css("display", "none");
+                    $myLinks.animate({ left: '-150px' }, 'slow'); // Slide out to the left
+                }
+
+            });
+
+
+
+            // scroll
+            $('a[href^="#"]').on('click', function (event) {
+                var target = $(this.getAttribute('href'));
+                if (target.length) {
+                    event.preventDefault();
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                }
+            });
+
+
+            // Toggle submenu when clicking on menu item
+            $('.sub').click(function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                var $submenu = $('.submenu');
+                $submenu.slideToggle('slow');
+                $('.submenu').not($submenu).slideUp('slow');
+                $('.submenu-icon').toggleClass('active');
+                $('.submenu-icon').not($('.submenu-icon')).removeClass('active');
+
+            });
+
+            // Toggle sub-submenu when clicking on menu item
+            $('.sub-submenu-parent').click(function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                var $subSubmenu = $(this).find('.sub-submenu');
+                $subSubmenu.slideToggle('slow');
+                $('.sub-submenu').not($subSubmenu).slideUp('slow');
+                $(this).find(' .sub-submenu-icon').toggleClass('active');
+                $(' .sub-submenu-icon').not($(this).find('.sub-submenu-icon')).removeClass('active');
+            });
+
+            // Prevent submenu from closing when clicking on submenu items
+            $('.submenu-parent .submenu, .sub-submenu-parent .sub-submenu').click(function (e) {
+                e.stopPropagation(); // Prevent event bubbling to parent elements
+            });
+
+            //   sticky
+            var lastScrollTop = 0;
+
+            $(window).scroll(function () {
+                var currentScrollTop = $(this).scrollTop();
+                if (currentScrollTop > lastScrollTop) {
+                    // Scrolling down
+                    $('.header').addClass('sticky');
+                } else {
+                    // Scrolling up
+                    $('.header').removeClass('sticky');
+                }
+
+                lastScrollTop = currentScrollTop;
+            });
+
+            // more menu
+            // MAIN MENU
+            const $mainMenu = $("#mainMenu");
+            const $autoNav = $("#autoNav");
+            const $autoNavMore = $("#autoNavMore");
+            const $autoNavMoreList = $("#autoNavMoreList");
+            autoNavMore = () => {
+                let childNumber = 2;
+
+                if ($(window).width() >= 280) {
+                    // GET MENU AND NAV WIDTH
+                    const $menuWidth = $mainMenu.width();
+                    const $autoNavWidth = $autoNav.width();
+                    if ($autoNavWidth > $menuWidth) {
+                        // CODE FIRES WHEN WINDOW SIZE GOES DOWN
+                        $autoNav
+                            .children(`li:nth-last-child(${childNumber})`)
+                            .prependTo($autoNavMoreList);
+                        autoNavMore();
+                    } else {
+                        // CODE FIRES WHEN WINDOW SIZE GOES UP
+                        const $autoNavMoreFirst = $autoNavMoreList
+                            .children("li:first-child")
+                            .width();
+                        // CHECK IF ITEM HAS ENOUGH SPACE TO PLACE IN MENU
+                        if ($autoNavWidth + $autoNavMoreFirst < $menuWidth) {
+                            $autoNavMoreList.children("li:first-child").insertBefore($autoNavMore);
+                        }
+                    }
+                    if ($autoNavMoreList.children().length > 0) {
+                        $autoNavMore.show();
+                        childNumber = 1;
+                    } else {
+                        $autoNavMore.hide();
+                        childNumber = 0;
+                    }
+                }
+            };
+            // INIT
+            autoNavMore();
+
+            // resize
+            $(window).resize(function(){
+                autoNavMore();
+            });
+            // MAIN MENU END
+            setInterval(autoNavMore, 100);
+
+        });
+       
+
+    </script>
+
+</body>
+
+</html>
